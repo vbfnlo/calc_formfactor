@@ -1,0 +1,144 @@
+#!/bin/bash
+
+if [[ "$1" == "" || "$2" == "" ]]; then
+  echo ""
+  echo ""
+  echo "Usage:"
+  echo "./batchrun f_dim8 f_dim6"
+  echo "f_dim8: anomalous coupling f_i / Lambda^4 for dimension 6 operators in Tev^-4"
+  echo "f_dim6: anomalous coupling f_i / Lambda^2 for dimension 6 operators in Tev^-2"
+  echo ""
+  echo "Setting f_dim6 or f_dim8 to 0 skips the dim6 / dim8 operators"
+  echo ""
+  echo "The program output is written to output_Fi_value.out ."
+  echo ""
+  echo ""
+  exit
+fi
+
+
+if [[ "$1" != "0" ]]; then
+
+echo "Calculation FF for Operator S0 = " $1
+sed "s/FS0/FS0 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FS0_${1}.dat
+
+echo "Calculation FF for Operator S1 = " $1
+sed "s/FS1/FS1 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FS1_${1}.dat
+
+
+echo "Calculation FF for Operator M0 = " $1
+sed "s/FM0/FM0 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FM0_${1}.dat
+
+echo "Calculation FF for Operator M1 = " $1
+sed "s/FM1/FM1 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FM1_${1}.dat
+
+echo "Calculation FF for Operator M2 = " $1
+sed "s/FM2/FM2 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FM2_${1}.dat
+
+echo "Calculation FF for Operator M3 = " $1
+sed "s/FM3/FM3 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FM3_${1}.dat
+
+echo "Calculation FF for Operator M4 = " $1
+sed "s/FM4/FM4 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FM4_${1}.dat
+
+echo "Calculation FF for Operator M5 = " $1
+sed "s/FM5/FM5 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FM5_${1}.dat
+
+echo "Calculation FF for Operator M6 = " $1
+sed "s/FM6/FM6 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FM6_${1}.dat
+
+echo "Calculation FF for Operator M7 = " $1
+sed "s/FM7/FM7 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FM7_${1}.dat
+
+
+echo "Calculation FF for Operator T0 = " $1
+sed "s/FT0/FT0 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FT0_${1}.dat
+
+echo "Calculation FF for Operator T1 = " $1
+sed "s/FT1/FT1 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FT1_${1}.dat
+
+echo "Calculation FF for Operator T2 = " $1
+sed "s/FT2/FT2 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FT2_${1}.dat
+
+echo "Calculation FF for Operator T5 = " $1
+sed "s/FT5/FT5 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FT5_${1}.dat
+
+echo "Calculation FF for Operator T6 = " $1
+sed "s/FT6/FT6 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FT6_${1}.dat
+
+echo "Calculation FF for Operator T7 = " $1
+sed "s/FT7/FT7 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FT7_${1}.dat
+
+echo "Calculation FF for Operator T8 = " $1
+sed "s/FT8/FT8 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FT8_${1}.dat
+
+echo "Calculation FF for Operator T9 = " $1
+sed "s/FT9/FT9 = ${1}.d-12 !/g" input_default.dat > input.dat
+./get-formfactor > output_FT9_${1}.dat
+
+fi
+
+
+
+if [[ "$2" != "0" ]]; then
+
+echo "Calculation FF for Operator W = " $2
+sed "s/FW /FW = ${2}.d-6 ! /g" input_default.dat > input.dat
+sed -i "s/FFEXP/FFEXP = 1d0 !/g" input.dat
+./get-formfactor > output_FW_${2}.dat
+
+echo "Calculation FF for Operator B = " $2
+sed "s/FB /FB = ${2}.d-6 ! /g" input_default.dat > input.dat
+sed -i "s/FFEXP/FFEXP = 1d0 !/g" input.dat
+./get-formfactor > output_FB_${2}.dat
+
+echo "Calculation FF for Operator WWW = " $2
+sed "s/FWWW /FWWW = ${2}.d-6 ! /g" input_default.dat > input.dat
+sed -i "s/FFEXP/FFEXP = 1d0 !/g" input.dat
+./get-formfactor > output_FWWW_${2}.dat
+
+echo "Calculation FF for Operator WW = " $2
+sed "s/FWW /FWW = ${2}.d-6 ! /g" input_default.dat > input.dat
+sed -i "s/FFEXP/FFEXP = 1d0 !/g" input.dat
+./get-formfactor > output_FWW_${2}.dat
+
+echo "Calculation FF for Operator BT = " $2
+sed "s/FBT /FBT = ${2}.d-6 ! /g" input_default.dat > input.dat
+sed -i "s/FFEXP/FFEXP = 1d0 !/g" input.dat
+./get-formfactor > output_FBT_${2}.dat
+
+echo "Calculation FF for Operator WWT = " $2
+sed "s/FWWT /FWWT = ${2}.d-6 ! /g" input_default.dat > input.dat
+sed -i "s/FFEXP/FFEXP = 1d0 !/g" input.dat
+./get-formfactor > output_FWWT_${2}.dat
+
+echo "Calculation FF for Operator WWWT = " $2
+sed "s/FWWWT /FWWWT = ${2}.d-6 ! /g" input_default.dat > input.dat
+sed -i "s/FFEXP/FFEXP = 1d0 !/g" input.dat
+./get-formfactor > output_FWWWT_${2}.dat
+
+echo "Calculation FF for Operator DWT = " $2
+sed "s/FDWT /FDWT = ${2}.d-6 ! /g" input_default.dat > input.dat
+sed -i "s/FFEXP/FFEXP = 1d0 !/g" input.dat
+./get-formfactor > output_FDWT_${2}.dat
+
+fi
+
+

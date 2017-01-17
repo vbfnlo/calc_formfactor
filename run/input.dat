@@ -1,0 +1,59 @@
+!
+! Main input file for get_formfactors
+!
+
+!
+! Parameters for form factor calculation
+!
+
+SQRT_S = 14000d0           ! energy up to which the unitarity is being checked
+FFEXP  = 2d0               ! exponent in form factor
+
+!
+! anomalous couplings coefficients
+!
+
+!dim-8-operators (already divided by Lambda^4):
+
+FS0          = 0.d-12      ! fs0
+FS1          = 0.d-12      ! fs1
+
+FM0          = 0.d-12      ! fm0
+FM1          = 0.d-12      ! fm1
+FM2          = 0.d-12      ! fm2
+FM3          = 0.d-12      ! fm3
+FM4          = 0.d-12      ! fm4
+FM5          = 0.d-12      ! fm5
+FM6          = 0.d-12      ! fm6
+FM7          = 0.d-12      ! fm7
+
+FT0          = 0.d-12      ! ft0
+FT1          = 0.d-12      ! ft1
+FT2          = 0.d-12      ! ft2
+FT5          = 0.d-12      ! ft5
+FT6          = 0.d-12      ! ft6
+FT7          = 0.d-12      ! ft7
+FT8          = 0.d-12      ! ft8
+FT9          = 0.d-12      ! ft9
+
+!dim-6-operators (already divided by Lambda^2):
+
+FW           = 0.d-6       ! fw
+FB           = 0.d-6       ! fb
+FWWW         = 0.d-6       ! fwww
+FWW          = 0.d-6       ! fww
+FBT          = 0.d-6       ! fbtilde
+FWWT         = 0.d-6       ! fwwtilde
+FWWWT        = 0.d-6       ! fwwwtilde
+FDWT         = 0.d-6       ! fdwtilde
+
+
+!
+!     Print short output or output with more details during calculation?
+!
+!     OUTPUT_DETAILS = 0: (almost) no output during calculation
+!     OUTPUT_DETAILS = 1: short output during calculation
+!     OUTPUT_DETAILS = 2: very detailed output during calculation
+
+OUTPUT_DETAILS = 0
+

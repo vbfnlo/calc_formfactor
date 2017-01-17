@@ -1,0 +1,116 @@
+********************************************************
+VBFNLO utility to calculate form factors, version 1.0.0:
+********************************************************
+
+obtainable from http://www.itp.kit.edu/vbfnlo
+
+and released under the GPL v2 license (see file COPYING).
+
+Contributions from:
+C. Englert, B. Feigl, J. Frank, M. Rauch, O. Schlimpert, F. Schissler
+
+This program belongs to the program package VBFNLO and can calculate
+input parameters needed for anomalous gauge boson coupling studies
+with VBFNLO. 
+As especially the pure operators for anomalous quartic gauge boson 
+couplings lead to a violation of tree-level unitarity within the energy 
+range of the LHC, special care has to be taken to avoid this unphysical
+behaviour. Within VBFNLO we have opted for the use of a dipole form 
+factor and this tool can calculate the maximal form factor scale 
+Lambda_FF which is allowed for a given input of coupling parameters, 
+assuming the form factor shape 
+
+            FF = 1 / ( 1 + s / Lambda_FF^2 )^FFexp .
+
+The form factor is determined by calculating on-shell VV scattering and 
+computing the zeroth partial wave of the amplitude. As unitarity criterion 
+the absolute value of the real part of the zeroth partial wave has to be 
+below 0.5 [Barger, Cheung, Han, Phillips; Phys.Rev. D42 (1990) 3052].
+Each channel in VV -> VV scattering (with V = W / Z) is checked 
+individually, additionally channels with the same electrical charge Q of 
+the VV system are combined [Gounaris, Layssac, Renard; Phys.Lett. B332 
+(1994) 146 (their definition of thepartial wave expansion differs from ours 
+by a factor of 2)].
+
+For more details please refer to
+* diploma thesis of B. Feigl (in German only)
+* diploma thesis of O. Schlimpert (in German only)
+at http://www.itp.kit.edu/diplomatheses.de.shtml .
+
+The full list of operators with anomalous gauge boson couplings which is 
+implemented in VBFNLO and probed here can be found in the manual of VBFNLO 
+version 2.7 (beta) at 
+http://www.itp.kit.edu/vbfnlo .
+
+Further reading on tree-level unitarity with anomalous couplings:
+Barger, Cheung, Han, Phillips; Phys.Rev. D42 (1990) 3052
+Baur, Zeppenfeld; Phys.Lett. B201 (1988) 383
+Baur, Zeppenfeld; Nucl.Phys. B308 (1988) 127
+Gounaris, Layssac, Renard; Phys.Lett. B332 (1994) 146; arXiv:hep-ph/9311370
+Gounaris, Layssac, Paschalis, Renard; Z.Phys. C66 (1995) 619; arXiv:hep-ph/9409260
+
+
+
+************
+*  Usage:  *
+************
+
+* run make in the source directory
+* the binary and input file are located in subfolder "run"
+* modify run/input.dat
+* run ./get-formfactor from the folder "run"
+
+The following compilers have been tested and compile this tool properly:
+gfortran (default), g77, ifort.
+If you want to switch the compiler, uncomment the appropriate lines in the 
+makefile.
+
+By running "./batchrun" all operators can be checked sequentially with a 
+given coupling strength. Issuing the command without arguments displays 
+a short manual.
+
+
+
+************
+*  Input:  *
+************
+
+In the file "run/input.dat" the following parameters can be set:
+* Maximum center-of-mass energy that should be considered
+* Desired exponent of the form factor.
+  You need at least
+  - FFexp = 1 for the dimension-6 operators and
+  - FFexp = 2 for the dimension-8 operators.
+* Coupling constants of the anomalous couplings
+
+
+
+*************
+*  Output:  *
+*************
+
+The program calculates the energy at which tree-level unitarity would
+be violated without a form factor and the form factor scale that
+ensures tree-level unitarity up to the given energy.
+The form factor scales are also written out to the file "run/ff_output.dat".
+
+The form factor scales are determined in three ways:
+* Considering only the helicity combination with the largest contribution
+  to the zeroth partial wave, separately for each VV -> VV channel.
+* Considering all helicity combinations with contributions to the zeroth
+  partial wave by diagonalizing the T-matrix, separately for each VV -> VV channel.
+* Considering all helicity combinations with contributions to the zeroth
+  partial wave by diagonalizing the T-matrix for all VV -> VV channels 
+  with V being a W or Z boson.
+
+
+
+
+
+**************
+* Changelog: *
+**************
+
+Version 1.0.0:
+* First public release.
+
