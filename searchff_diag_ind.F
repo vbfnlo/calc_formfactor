@@ -14,8 +14,11 @@
       real*8 real_pwave_value, max_pwave_value, real_pwave_error, minangle
       real*8 im_pwave_value, im_pwave_error, unitviol
 
+      integer n_helcomb
+
       integer mat_i, mat_j, i, j, ier
       complex*16 mat(0:2,0:2)
+      complex*16 mat_photon(0:1,0:1)
       double precision mat_acc
 
       real*8 ff_lowerlimit, ff_upperlimit, ffmassscale_old
@@ -63,35 +66,74 @@
             print*, ""
       end select
 
+      if (channel.eq."AA   -> AA  " .or. channel.eq."ZA   -> ZA  " .or. channel.eq."W+A  -> W+A ") then
+         n_helcomb = 2
+         if (ldebugout) then
+            print*, ""
+            print*, "Photons in initial and final state: No longitudinal polarizations!"
+            print*, ""
+         endif
+      else
+         n_helcomb = 3
+      endif
+
       ! first check if form factor is neccessary:
       formfact = .false.
       energy = 100d0
+      max_pwave_value = 0d0
       do while (energy .lt. sqrts .and. abs(max_pwave_value).le.0.5d0)
         max_pwave_value = 0d0
         energy = energy + 100d0
         sc = energy**2
         ! pwave0: only h1=h2 & h3=h4 allowed
-        do mat_i=0,2
-          do mat_j=0,2
-             nhel(1) = mat_i-1
-             nhel(2) = mat_i-1
-             nhel(3) = mat_j-1
-             nhel(4) = mat_j-1
+        do mat_i = 0, n_helcomb - 1
+          do mat_j = 0, n_helcomb - 1
+             if (n_helcomb.eq.2 .and. mat_i.eq.1) then
+                nhel(1) = 1
+                nhel(2) = 1
+             else
+                nhel(1) = mat_i-1
+                nhel(2) = mat_i-1
+             endif
+             if (n_helcomb.eq.2 .and. mat_j.eq.1) then
+                nhel(3) = 1
+                nhel(4) = 1
+             else
+                nhel(3) = mat_j-1
+                nhel(4) = mat_j-1
+             endif
              call gaussint(pwave_func_real,minangle, pi, real_pwave_value,real_pwave_error)
              call gaussint(pwave_func_im,minangle, pi, im_pwave_value,im_pwave_error)
-             mat(mat_i,mat_j) = real_pwave_value + (0.,1.)*im_pwave_value
+             if (n_helcomb.eq.3) then
+                mat(mat_i,mat_j) = real_pwave_value + (0.,1.)*im_pwave_value
+             else
+                mat_photon(mat_i,mat_j) = real_pwave_value + (0.,1.)*im_pwave_value
+             endif
           enddo
         enddo
 !        print*, ""
-!        do i=0,2
-!          print*, (mat(i,j), j=0,2)
-!        enddo
+!        if (n_helcomb.eq.3) then
+!           do i=0,2
+!             print*, (mat(i,j), j=0,2)
+!           enddo
+!        else
+!           do i=0,1
+!             print*, (mat_photon(i,j), j=0,1)
+!           enddo
+!        endif
 !        print*, ""
         mat_acc = 1d-6
-        call eigenvalues(mat,3,mat_acc,10000,ier)
-        max_pwave_value = max(abs(dreal(mat(0,0))),abs(dreal(mat(1,1))),abs(dreal(mat(2,2))))
-!        write(*,*) ier, mat_acc
-!        write(*,*) (mat(i,i),i=0,2)
+        if (n_helcomb.eq.3) then
+          call eigenvalues(mat,3,mat_acc,10000,ier)
+          max_pwave_value = max(abs(dreal(mat(0,0))),abs(dreal(mat(1,1))),abs(dreal(mat(2,2))))
+!          write(*,*) ier, mat_acc
+!          write(*,*) (mat(i,i),i=0,2)
+        else
+          call eigenvalues(mat_photon,2,mat_acc,10000,ier)
+          max_pwave_value = max(abs(dreal(mat_photon(0,0))),abs(dreal(mat_photon(1,1))))
+!          write(*,*) ier, mat_acc
+!          write(*,*) (mat_photon(i,i),i=0,1)
+        endif
 !        print*, ""
       enddo
 
@@ -149,25 +191,44 @@
           endif
           max_pwave_value = 0d0
           energy = 100d0
-          do while (energy .lt. sqrts .and. max_pwave_value.le.0.5d0)
+          do while (energy .lt. sqrts .and. abs(max_pwave_value).le.0.5d0)
             max_pwave_value = 0d0
             energy = energy + 100d0
             sc = energy**2
             ! pwave0: only h1=h2 & h3=h4 allowed
-            do mat_i=0,2
-              do mat_j=0,2
-                 nhel(1) = mat_i-1
-                 nhel(2) = mat_i-1
-                 nhel(3) = mat_j-1
-                 nhel(4) = mat_j-1
+            do mat_i = 0, n_helcomb - 1
+              do mat_j = 0, n_helcomb - 1
+                 if (n_helcomb.eq.2 .and. mat_i.eq.1) then
+                    nhel(1) = 1
+                    nhel(2) = 1
+                 else
+                    nhel(1) = mat_i-1
+                    nhel(2) = mat_i-1
+                 endif
+                 if (n_helcomb.eq.2 .and. mat_j.eq.1) then
+                    nhel(3) = 1
+                    nhel(4) = 1
+                 else
+                    nhel(3) = mat_j-1
+                    nhel(4) = mat_j-1
+                 endif
                  call gaussint(pwave_func_real,minangle, pi, real_pwave_value,real_pwave_error)
                  call gaussint(pwave_func_im,minangle, pi, im_pwave_value,im_pwave_error)
-                 mat(mat_i,mat_j) = real_pwave_value + (0.,1.)*im_pwave_value
+                 if (n_helcomb.eq.3) then
+                    mat(mat_i,mat_j) = real_pwave_value + (0.,1.)*im_pwave_value
+                 else
+                    mat_photon(mat_i,mat_j) = real_pwave_value + (0.,1.)*im_pwave_value
+                 endif
               enddo
             enddo
             mat_acc = 1d-6
-            call eigenvalues(mat,3,mat_acc,10000,ier)
-            max_pwave_value = max(abs(dreal(mat(0,0))),abs(dreal(mat(1,1))),abs(dreal(mat(2,2))))
+            if (n_helcomb.eq.3) then
+               call eigenvalues(mat,3,mat_acc,10000,ier)
+               max_pwave_value = max(abs(dreal(mat(0,0))),abs(dreal(mat(1,1))),abs(dreal(mat(2,2))))
+            else
+               call eigenvalues(mat_photon,2,mat_acc,10000,ier)
+               max_pwave_value = max(abs(dreal(mat_photon(0,0))),abs(dreal(mat_photon(1,1))))
+            endif
           enddo
           if (ldebugout) write(*,"(A,F11.2,A,F9.4,A,F9.0,A)") " Lambda_FF: ", ffmassscale, "   ---   Re(pwave_0): ", 
      &      abs(max_pwave_value), "   ---   at ", energy, " GeV"
@@ -176,9 +237,9 @@
               print*, ""
               print*, ""
               print*, ""
-              print*, "********************************************************************"
+              print*, "*******************************************************************"
               print*, "* Result for ", channel, " scattering, diagonalizing the T-matrix: *"
-              print*, "********************************************************************"
+              print*, "*******************************************************************"
               print*, ""
               write(*,"(A,F9.0,A)") " Lambda_FF =", ffmassscale, " GeV"
               print*, ""

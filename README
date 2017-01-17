@@ -1,5 +1,5 @@
 ********************************************************
-VBFNLO utility to calculate form factors, version 1.0.0:
+VBFNLO utility to calculate form factors, version 1.2.1:
 ********************************************************
 
 obtainable from http://www.itp.kit.edu/vbfnlo
@@ -26,11 +26,11 @@ The form factor is determined by calculating on-shell VV scattering and
 computing the zeroth partial wave of the amplitude. As unitarity criterion 
 the absolute value of the real part of the zeroth partial wave has to be 
 below 0.5 [Barger, Cheung, Han, Phillips; Phys.Rev. D42 (1990) 3052].
-Each channel in VV -> VV scattering (with V = W / Z) is checked 
-individually, additionally channels with the same electrical charge Q of 
-the VV system are combined [Gounaris, Layssac, Renard; Phys.Lett. B332 
-(1994) 146 (their definition of thepartial wave expansion differs from ours 
-by a factor of 2)].
+Each channel in VV -> VV scattering (with V = W / Z / gamma) is checked 
+individually. Additionally, channels with the same electrical charge Q of 
+the VV system are combined [Gounaris, Layssac, Renard; 
+Phys.Lett. B332 (1994) 146 (their definition of the partial wave expansion 
+differs from ours by a factor of 2)].
 
 For more details please refer to
 * diploma thesis of B. Feigl (in German only)
@@ -95,13 +95,26 @@ ensures tree-level unitarity up to the given energy.
 The form factor scales are also written out to the file "run/ff_output.dat".
 
 The form factor scales are determined in three ways:
+
 * Considering only the helicity combination with the largest contribution
-  to the zeroth partial wave, separately for each VV -> VV channel.
+  to the zeroth partial wave, separately for each VV -> VV channel, with
+  V including W-bosons, Z-bosons and photons.
+  This is the simplest approach. Only taking the largest helicity combination
+  may be slightly too optimistic. This option is useful for checking the relative
+  importance of different channels.
+
 * Considering all helicity combinations with contributions to the zeroth
-  partial wave by diagonalizing the T-matrix, separately for each VV -> VV channel.
+  partial wave by diagonalizing the T-matrix, separately for each VV -> VV channel,
+  where V includes W-bosons, Z-bosons and photons.
+  This option gives form factor scales that are more restrictive than option 1.
+  The values are valid for processes which involve only one channel.
+
 * Considering all helicity combinations with contributions to the zeroth
   partial wave by diagonalizing the T-matrix for all VV -> VV channels 
-  with V being a W or Z boson.
+  with V being a W-boson, Z-boson or photon.
+  Using this approach gives the most stringent values for form factor and 
+  unitarity violation scale. They also hold for processes with more than one
+  quartic vertex contributing.
 
 
 
@@ -110,6 +123,21 @@ The form factor scales are determined in three ways:
 **************
 * Changelog: *
 **************
+
+Version 1.2.1:
+* Bugfix for form factor output option 1:
+  When using FFexp larger than minimal value, the form factor scale for some
+  operators was too high. Output of option 2 and 3 was not affected.
+* README: Added some guidelines how to use the results from the different
+  calculation options.
+
+Version 1.2.0:
+* Include all photon channels for all three calculation options.
+* Include W+W+ -> W+W+ channel.
+
+Version 1.1.0 beta:
+* Some channels with external photons have been included for the first
+  form factor calculation option.
 
 Version 1.0.0:
 * First public release.

@@ -100,7 +100,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
        integer i,j,k, ip
        double complex cg(mdo), sg(mdo), tg, tmpAij
-       double complex wshift, ddiff, sdiff
+       double complex wshift, ddiff, sdiff, wnorm
 
 c Wilkinson shift
 c from eigenvalues of lower-left 2x2 matrix
@@ -111,8 +111,10 @@ c from eigenvalues of lower-left 2x2 matrix
          sdiff = ddiff/abs(ddiff)
        endif
        wshift = A(mdo,mdo) 
-     &   - sdiff*A(mdo-1,mdo)*A(mdo,mdo-1)
-     &     /(abs(ddiff)+sqrt(ddiff**2+A(mdo-1,mdo)*A(mdo,mdo-1)))
+       wnorm = (abs(ddiff)+sqrt(ddiff**2+A(mdo-1,mdo)*A(mdo,mdo-1)))
+       if (wnorm .ne. 0d0) then
+         wshift = wshift - sdiff*A(mdo-1,mdo)*A(mdo,mdo-1)/wnorm
+       endif
        do i=1,mdo
          A(i,i) = A(i,i) - wshift
        enddo
@@ -182,6 +184,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
        integer i, iter, mloc
        double precision myacc, sumoff, sumdiag
+       double complex acc_nom, acc_denom
 
 c transform A into Hessenberg form by successive Householder reflections
        call hessenberg(A,m,ier)
@@ -201,7 +204,15 @@ c check whether accuracy is ok
 c compare last off-diagonal element to last two diagonal ones
          myacc = 0d0
          do while ( (mloc.gt.1) .and. (myacc.lt.acc) )
-           myacc = abs(2*A(mloc,mloc-1)/(A(mloc-1,mloc-1)+A(mloc,mloc)))
+           acc_nom   = 2*A(mloc,mloc-1)
+           acc_denom = (abs(A(mloc-1,mloc-1))+abs(A(mloc,mloc)))
+           if (abs(acc_nom).eq.0d0 .and. abs(acc_denom).eq.0d0) then
+             myacc = 0d0
+           elseif (abs(acc_nom).ne.0d0 .and. abs(acc_denom).eq.0d0) then
+             myacc = acc * 1000d0
+           else
+             myacc = abs(acc_nom/acc_denom)
+           endif
            if (myacc.lt.acc) mloc = mloc-1
          enddo
 

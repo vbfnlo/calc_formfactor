@@ -13,6 +13,7 @@
 
       real*8 real_pwave_value, max_pwave_value, real_pwave_error, minangle
       integer helcount
+      logical photon_init, photon_final
 
       real*8 ff_lowerlimit, ff_upperlimit, ffmassscale_old
       real*8 energy, unitviol
@@ -59,6 +60,38 @@
             print*, "has to be < 0.5 ." 
             print*, ""
       end select
+      
+      if (channel.eq."AA   -> AA  " .or. channel.eq."ZA   -> AA  " .or.
+     &    channel.eq."AA   -> ZA  " .or. channel.eq."ZA   -> ZA  " .or. channel.eq."W+A  -> W+A ") then
+         photon_init  = .true.
+         photon_final = .true.
+         if (ldebugout) then
+            print*, ""
+            print*, "Photons in initial and final state: No longitudinal polarizations!"
+            print*, ""
+         endif
+      elseif (channel.eq."ZZ   -> ZA  " .or. channel.eq."ZZ   -> AA  " .or. 
+     &        channel.eq."W+W- -> AA  " .or. channel.eq."W+W- -> ZA  " .or. channel.eq."W+Z  -> W+A ") then
+         photon_init  = .false.
+         photon_final = .true.
+         if (ldebugout) then
+            print*, ""
+            print*, "Photons in initial state: No longitudinal polarizations there!"
+            print*, ""
+         endif
+      elseif (channel.eq."ZA   -> ZZ  " .or. channel.eq."AA   -> ZZ  " .or. 
+     &        channel.eq."AA   -> W+W-" .or. channel.eq."ZA   -> W+W-" .or. channel.eq."W+A  -> W+Z ") then
+         photon_init  = .true.
+         photon_final = .false.
+         if (ldebugout) then
+            print*, ""
+            print*, "Photons in final state: No longitudinal polarizations there!"
+            print*, ""
+         endif
+      else
+         photon_init  = .false.
+         photon_final = .false.
+      endif
 
       ! first check if form factor is neccessary:
       formfact = .false.
@@ -68,14 +101,17 @@
         max_pwave_value = 0d0
         energy = energy + 100d0
         sc = energy**2
-        ! pwave0: only h1=h2 & h3=h4 allowed
-        do helcount=0,8
+        ! partial wave 0: only h1=h2 & h3=h4 allowed
+        ! with photon in initial or final state: no longitudinal polarization
+        do helcount = 0,8
            nhel(1) = mod(helcount/3,3)-1
            nhel(2) = mod(helcount/3,3)-1
            nhel(3) = mod(helcount,3)-1
            nhel(4) = mod(helcount,3)-1
-           call gaussint(pwave_func_real,minangle, pi, real_pwave_value,real_pwave_error)
-           if (abs(real_pwave_value) .gt. abs(max_pwave_value)) max_pwave_value = real_pwave_value
+           if (.not.((photon_init.and.(nhel(1).eq.0)) .or. (photon_final.and.(nhel(3).eq.0)))) then
+              call gaussint(pwave_func_real,minangle, pi, real_pwave_value,real_pwave_error)
+              if (abs(real_pwave_value) .gt. abs(max_pwave_value)) max_pwave_value = real_pwave_value
+           endif
         enddo
       enddo
 
@@ -133,18 +169,21 @@
           endif
           max_pwave_value = 0d0
           energy = 100d0
-          do while (energy .lt. sqrts .and. max_pwave_value.le.0.5d0)
+          do while (energy .lt. sqrts .and. abs(max_pwave_value).le.0.5d0)
             max_pwave_value = 0d0
             energy = energy + 100d0
             sc = energy**2
-            ! pwave0: only h1=h2 & h3=h4 allowed
+            ! partial wave 0: only h1=h2 & h3=h4 allowed
+            ! with photon in initial or final state: no longitudinal polarization
             do helcount=0,8
                nhel(1) = mod(helcount/3,3)-1
                nhel(2) = mod(helcount/3,3)-1
                nhel(3) = mod(helcount,3)-1
                nhel(4) = mod(helcount,3)-1
-               call gaussint(pwave_func_real,minangle, pi, real_pwave_value,real_pwave_error)
-               if (abs(real_pwave_value) .gt. abs(max_pwave_value)) max_pwave_value = real_pwave_value
+               if (.not.((photon_init.and.(nhel(1).eq.0)) .or. (photon_final.and.(nhel(3).eq.0)))) then
+                  call gaussint(pwave_func_real,minangle, pi, real_pwave_value,real_pwave_error)
+                  if (abs(real_pwave_value) .gt. abs(max_pwave_value)) max_pwave_value = real_pwave_value
+               endif
             enddo
           enddo
           if (ldebugout) write(*,"(A,F11.2,A,F9.4,A,F9.0,A)") " Lambda_FF: ", ffmassscale, "   ---   Re(pwave_0): ", 
