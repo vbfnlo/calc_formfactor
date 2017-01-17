@@ -2589,6 +2589,8 @@ c
         fbtilde=fbtilde_0*ffvalue
         fwwwtilde=fwwwtilde_0*ffvalue
         fdwtilde=fdwtilde_0*ffvalue
+** Higgs
+        fphid=fphid_0*ffvalue
 
       else
 
@@ -2620,6 +2622,7 @@ c
         fbtilde=fbtilde_0
         fwwwtilde=fwwwtilde_0
         fdwtilde=fdwtilde_0
+        fphid=fphid_0
 
       endif
 

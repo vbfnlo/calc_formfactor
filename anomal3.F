@@ -1221,6 +1221,7 @@ c where all the bosons are defined by the flowing-OUT quantum number.
       q(4)  = dimag(sc(2))
 
       vertex = gw*zmass/sqrt(cos2w)*sc(1)*dotcc(v1,v2)
+     &          /sqrt(1+2d0*fphid*(2d0*wmass/gw)**2)
 
       if (fphi1 .ne. 0) then
          vertex = vertex + fphi1 * 4. * wmass**3 / gw / cos2w * sc(1) * dotcc(v1,v2)
@@ -1326,6 +1327,7 @@ c where all the bosons are defined by the flowing-OUT quantum number.
 
 c     Vertex:
       hvv(1) = gw*zmass/sqrt(cos2w)*dotcc(v1,v2)
+     &          /sqrt(1+2d0*fphid*(2d0*wmass/gw)**2)
 
       if (fphi1 .ne. 0) then
          hvv(1) = hvv(1) + fphi1 * 4. * wmass**3 / gw / cos2w * dotcc(v1,v2)
@@ -1788,6 +1790,7 @@ c where all the bosons are defined by the flowing-OUT quantum number.
       q(4)  = dimag(sc(2))
 
       vertex = gw*wmass*sc(1)*dotcc(v1,v2)
+     &          /sqrt(1+2d0*fphid*(2d0*wmass/gw)**2)
 
       if (fw .ne. 0) then
          vertex = vertex + fw * gw * wmass / 2. * sc(1) * ( (dotrr(q,p1) + dotrr(q,p2)) * dotcc(v1,v2)
@@ -1858,6 +1861,7 @@ c where all the bosons are defined by the flowing-OUT quantum number.
 
 c     Vertex:
       hvv(1) = gw*wmass*dotcc(v1,v2)
+     &          /sqrt(1+2d0*fphid*(2d0*wmass/gw)**2)
 
       if (fw .ne. 0) then
          hvv(1) = hvv(1) + fw * gw * wmass / 2. * ( (dotrr(q,p1) + dotrr(q,p2)) * dotcc(v1,v2)

@@ -46,6 +46,7 @@ FBT          = 0.d-6       ! fbtilde
 FWWT         = 0.d-6       ! fwwtilde
 FWWWT        = 0.d-6       ! fwwwtilde
 FDWT         = 0.d-6       ! fdwtilde
+FPHID        = 0.d-6       ! fphiD
 
 
 !

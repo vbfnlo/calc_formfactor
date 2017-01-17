@@ -10,23 +10,6 @@ c in the file koppln.inc
       include "coupl.inc"
       include "an_couplings_4v.inc"
 
-c
-c set Standard Model couplings. SM input is in koppln.inc
-c
-
-      CALL KOPPLN(2)
-      call ctrans
-
-      print*, ""
-      print*, "Setting widths of H, Z, W to zero to prevent violation of"
-      print*, "gauge invariance at large energies due to MadGraph-like"
-      print*, "complex-mass-scheme."
-      print*, ""
-      HWIDTH = 0d0
-      ZWIDTH = 0d0
-      WWIDTH = 0d0
-
-
       print*, ""
       print*, "Reading in anomalous couplings parameter:"
       print*, ""
@@ -60,6 +43,7 @@ c
       call read_real("FWWWT", fwwwtilde, 0.0d0)
       call read_real("FWWT", fWwtilde, 0.0d0)
       call read_real("FDWT", fdwtilde, 0.0d0)
+      call read_real("FPHID", fphid, 0.0d0)
 
       call read_int("OUTPUT_DETAILS", outputdetails, 0)
       call closefile
@@ -90,6 +74,24 @@ c
       fwwtilde_0=fwwtilde
       fwwwtilde_0=fwwwtilde
       fdwtilde_0=fdwtilde
+      fphid_0=fphid
+
+c
+c set Standard Model couplings. SM input is in koppln.inc
+c
+
+      CALL KOPPLN(2)
+      call ctrans
+
+      print*, ""
+      print*, "Setting widths of H, Z, W to zero to prevent violation of"
+      print*, "gauge invariance at large energies due to MadGraph-like"
+      print*, "complex-mass-scheme."
+      print*, ""
+      HWIDTH = 0d0
+      ZWIDTH = 0d0
+      WWIDTH = 0d0
+
 
 
       end

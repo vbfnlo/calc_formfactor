@@ -1,5 +1,5 @@
 ********************************************************
-VBFNLO utility to calculate form factors, version 1.2.1:
+VBFNLO utility to calculate form factors, version 1.3.0:
 ********************************************************
 
 obtainable from http://www.itp.kit.edu/vbfnlo
@@ -123,6 +123,11 @@ The form factor scales are determined in three ways:
 **************
 * Changelog: *
 **************
+
+Version 1.3.0:
+* Bugfix in printout of coupling constants: negative values are now printed
+  as well.
+* Include operator O_phiD .
 
 Version 1.2.1:
 * Bugfix for form factor output option 1:

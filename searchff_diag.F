@@ -613,8 +613,8 @@ c*******************************************************************************
                call gaussint(im_pwave_aaww,0d0, pi, im_pwave_value,im_pwave_error)
 
              elseif (mat_i.lt.3 .and. mat_j.ge.3 .and. mat_j.lt.6) then
-               call gaussint(real_pwave_wwzz,0.1d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
-               call gaussint(im_pwave_wwzz,0.1d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
+               call gaussint(real_pwave_wwzz,0d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
+               call gaussint(im_pwave_wwzz,0d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
              elseif (mat_i.ge.3 .and. mat_i.lt.6 .and. mat_j.ge.3 .and. mat_j.lt.6) then
                call gaussint(real_pwave_zz,0d0, pi, real_pwave_value,real_pwave_error)
                call gaussint(im_pwave_zz,0d0, pi, im_pwave_value,im_pwave_error)
@@ -626,8 +626,8 @@ c*******************************************************************************
                call gaussint(im_pwave_aazz,0d0, pi, im_pwave_value,im_pwave_error)
 
              elseif (mat_i.lt.3 .and. mat_j.ge.6 .and. mat_j.lt.8) then
-               call gaussint(real_pwave_wwza,0.1d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
-               call gaussint(im_pwave_wwza,0.1d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
+               call gaussint(real_pwave_wwza,0d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
+               call gaussint(im_pwave_wwza,0d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
              elseif (mat_i.ge.3 .and. mat_i.lt.6 .and. mat_j.ge.6 .and. mat_j.lt.8) then
                call gaussint(real_pwave_zzza,0d0, pi, real_pwave_value,real_pwave_error)
                call gaussint(im_pwave_zzza,0d0, pi, im_pwave_value,im_pwave_error)
@@ -639,8 +639,8 @@ c*******************************************************************************
                call gaussint(im_pwave_aaza,0d0, pi, im_pwave_value,im_pwave_error)
 
              elseif (mat_i.lt.3 .and. mat_j.ge.8) then
-               call gaussint(real_pwave_wwaa,0.1d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
-               call gaussint(im_pwave_wwaa,0.1d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
+               call gaussint(real_pwave_wwaa,0d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
+               call gaussint(im_pwave_wwaa,0d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
              elseif (mat_i.ge.3 .and. mat_i.lt.6 .and. mat_j.ge.8) then
                call gaussint(real_pwave_zzaa,0d0, pi, real_pwave_value,real_pwave_error)
                call gaussint(im_pwave_zzaa,0d0, pi, im_pwave_value,im_pwave_error)
@@ -759,8 +759,8 @@ c*******************************************************************************
                      call gaussint(im_pwave_aaww,0d0, pi, im_pwave_value,im_pwave_error)
 
                    elseif (mat_i.lt.3 .and. mat_j.ge.3 .and. mat_j.lt.6) then
-                     call gaussint(real_pwave_wwzz,0.1d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
-                     call gaussint(im_pwave_wwzz,0.1d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
+                     call gaussint(real_pwave_wwzz,0d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
+                     call gaussint(im_pwave_wwzz,0d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
                    elseif (mat_i.ge.3 .and. mat_i.lt.6 .and. mat_j.ge.3 .and. mat_j.lt.6) then
                      call gaussint(real_pwave_zz,0d0, pi, real_pwave_value,real_pwave_error)
                      call gaussint(im_pwave_zz,0d0, pi, im_pwave_value,im_pwave_error)
@@ -772,8 +772,8 @@ c*******************************************************************************
                      call gaussint(im_pwave_aazz,0d0, pi, im_pwave_value,im_pwave_error)
 
                    elseif (mat_i.lt.3 .and. mat_j.ge.6 .and. mat_j.lt.8) then
-                     call gaussint(real_pwave_wwza,0.1d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
-                     call gaussint(im_pwave_wwza,0.1d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
+                     call gaussint(real_pwave_wwza,0d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
+                     call gaussint(im_pwave_wwza,0d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
                    elseif (mat_i.ge.3 .and. mat_i.lt.6 .and. mat_j.ge.6 .and. mat_j.lt.8) then
                      call gaussint(real_pwave_zzza,0d0, pi, real_pwave_value,real_pwave_error)
                      call gaussint(im_pwave_zzza,0d0, pi, im_pwave_value,im_pwave_error)
@@ -785,8 +785,8 @@ c*******************************************************************************
                      call gaussint(im_pwave_aaza,0d0, pi, im_pwave_value,im_pwave_error)
 
                    elseif (mat_i.lt.3 .and. mat_j.ge.8) then
-                     call gaussint(real_pwave_wwaa,0.1d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
-                     call gaussint(im_pwave_wwaa,0.1d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
+                     call gaussint(real_pwave_wwaa,0d0/180d0*pi, pi, real_pwave_value,real_pwave_error)
+                     call gaussint(im_pwave_wwaa,0d0/180d0*pi, pi, im_pwave_value,im_pwave_error)
                    elseif (mat_i.ge.3 .and. mat_i.lt.6 .and. mat_j.ge.8) then
                      call gaussint(real_pwave_zzaa,0d0, pi, real_pwave_value,real_pwave_error)
                      call gaussint(im_pwave_zzaa,0d0, pi, im_pwave_value,im_pwave_error)

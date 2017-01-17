@@ -82,6 +82,7 @@ c      data xmh    /120.d0/
 c      data gfermi /1.16639d-5/
       include 'global.inc'
       include 'koppln.inc'
+      include 'an_couplings_4v.inc'
 c
 c OUTPUT
 c
@@ -283,7 +284,8 @@ c
       B(6,3,4) = GWH
       B(6,4,3) = GWH
       
-      treefac = 1d0
+c      treefac = 1d0
+      treefac = 1d0/sqrt(1+2d0*fphid_0/(sqrt(2d0)*GFERMI))
       ahvv(1,2,2) = treefac*B(6,2,2)*xmw *(-1.0d0,0.0d0) !a1 are sm hzz and hww couplings
       do i=3,4
          j = 7-i
@@ -768,7 +770,7 @@ c      COMMON /BKOPOU/ CLR(4,5,-1:1),XM2(6),XMG(6),B(6,6,6),V(4,5),A(4,5)
       double complex ahvv(3,4,4)
       common/tensorhvv/ ahvv
       logical luseSM
-      parameter(luseSM = .true.)
+      parameter(luseSM = .false.)
 c     
       bos = id
       if(id.eq.4) then

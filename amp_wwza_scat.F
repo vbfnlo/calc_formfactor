@@ -67,7 +67,7 @@ c the scattering is assumed to be in the y-z-plane
             pwave_wwza_anom = 1.d0/(32.d0*pi) * amp_wwza * sin(theta)                                ! pwave 0
       endif
 
-      ! symmetry factor:
+      ! symmetry factor for identical particles from wave function normalization:
       ! 1
 
       end
