@@ -56,7 +56,7 @@ c     formfactor
       Pff(3)=P(3,1)+P(3,2)
       call anomal_formfactor_4v(Pff)
 
-!      print*, fs0, fs1
+!      print*, fs0, fs1, fs2
 !      print*, fm0, fm1, fm2, fm3, fm4, fm5, fm6, fm7
 !      print*, ft0, ft1, ft2, ft5, ft6, ft7, ft8, ft9
 !      print*,""

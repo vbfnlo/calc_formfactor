@@ -19,6 +19,7 @@ c in the file koppln.inc
       call read_real("FFEXP",ffexponent,2d0)
       call read_real("FS0",fs0,0.0d0)
       call read_real("FS1",fs1,0.0d0)
+      call read_real("FS2",fs2,0.0d0)
       call read_real("FM0",fm0,0.0d0)
       call read_real("FM1",fm1,0.0d0)
       call read_real("FM2",fm2,0.0d0)
@@ -50,6 +51,7 @@ c in the file koppln.inc
 
       fs0_0=fs0
       fs1_0=fs1
+      fs2_0=fs2
       fm0_0=fm0
       fm1_0=fm1
       fm2_0=fm2

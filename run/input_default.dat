@@ -17,6 +17,7 @@ FFEXP  = 2d0               ! exponent in form factor
 
 FS0          = 0.d-12      ! fs0
 FS1          = 0.d-12      ! fs1
+FS2          = 0.d-12      ! fs2
 
 FM0          = 0.d-12      ! fm0
 FM1          = 0.d-12      ! fm1

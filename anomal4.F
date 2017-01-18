@@ -600,6 +600,10 @@ c
         wwzz = wwzz + fs1 * wmass**4 / cos2w * 2.0d0 * dotcc(wm,wp)*dotcc(z1,z2)
       endif
 
+      if (fs2 .ne. 0) then
+        wwzz = wwzz + fs2 * wmass**4 / cos2w * (dotcc(wm,z1)*dotcc(wp,z2) + dotcc(wm,z2)*dotcc(wp,z1))
+      endif
+
       if (ft0 .ne. 0) then
         wwzz = wwzz + ft0 * 8. * gw**4 * cos2w * ( dotrc(pwp,wm)*dotrc(pwm,wp) - dotcc(wp,wm)*dotrr(pwp,pwm) )
      &   * ( dotrc(pz1,z2)*dotrc(pz2,z1) - dotcc(z1,z2)*dotrr(pz1,pz2) )
@@ -919,6 +923,12 @@ c
      &      + dotcc(wp1,wm1) * dotcc(wp2,wm2))
       endif
 
+      if (fs2 .ne. 0) then
+        wwww = wwww + 2. * fs2 * wmass**4 
+     &     * (dotcc(wp1,wm2) * dotcc(wp2,wm1)
+     &     +  dotcc(wp1,wm1) * dotcc(wp2,wm2))
+      endif
+
       if (ft0 .ne. 0) then
         wwww = wwww + 8. * ft0 * gw**4 * (
      &      ( dotrc(pwm1,wp2)*dotrc(pwp2,wm1) - dotcc(wm1,wp2)*dotrr(pwm1,pwp2) )
@@ -1161,6 +1171,11 @@ c
       if (fs1 .ne. 0) then
         zzzz = zzzz + 2. * fs1 * wmass**4 / cos2w**2 
      &      * ( dotcc(z1,z4)*dotcc(z2,z3) + dotcc(z1,z3)*dotcc(z2,z4) + dotcc(z1,z2)*dotcc(z3,z4) )
+      endif
+
+      if (fs2 .ne. 0) then
+       zzzz = zzzz + 2. * fs2 * wmass**4 / cos2w**2 * 
+     &     ( dotcc(z1,z4)*dotcc(z2,z3) + dotcc(z1,z3)*dotcc(z2,z4) + dotcc(z1,z2)*dotcc(z3,z4) )
       endif
 
       if (fm0 .ne. 0) then
@@ -2561,6 +2576,7 @@ c
 ** dim-8 operators:
         fs0=fs0_0*ffvalue
         fs1=fs1_0*ffvalue
+        fs2=fs2_0*ffvalue
         ft0=ft0_0*ffvalue
         ft1=ft1_0*ffvalue
         ft2=ft2_0*ffvalue
@@ -2596,6 +2612,7 @@ c
 
         fs0=fs0_0
         fs1=fs1_0
+        fs2=fs2_0
         ft0=ft0_0
         ft1=ft1_0
         ft2=ft2_0

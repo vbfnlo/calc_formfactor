@@ -11,6 +11,8 @@ c computes form factors for anomalous quartic gauge couplings from vector boson 
       parameter(pi =3.141592653589793d0)     
       integer k
 
+      real*8 photangle, zeroangle
+
       real*8 real_pwave_ww, real_pwave_wpwp, real_pwave_wz, real_pwave_zz, real_pwave_wwzz, real_pwave_zzww
       external real_pwave_ww, real_pwave_wpwp, real_pwave_wz, real_pwave_zz, real_pwave_wwzz, real_pwave_zzww
       real*8 real_pwave_aa, real_pwave_zzaa, real_pwave_wwaa, real_pwave_wwza, real_pwave_zaaa
@@ -62,6 +64,10 @@ c computes form factors for anomalous quartic gauge couplings from vector boson 
       common /partwave/ pw, nhel
 
       pw=0        ! which partial wave should be computed? (0,1,2)
+c cutoff for the scattering angle to avoid the Coulomb singularity in processes with t-channel photons
+c see https://www.itp.kit.edu/~vbfnloweb/wiki/doku.php?id=developer:details:formfactor for details on the chosen value
+      photangle = 1.0d0/180d0*pi   ! processes with photons
+      zeroangle = 0.0d0/180d0*pi   ! all other processes - no cutoff needed
 
       if (pw.gt.0) then
             print*, ""
@@ -101,6 +107,7 @@ c computes form factors for anomalous quartic gauge couplings from vector boson 
       write(11,*) "! The following anomalous couplings to / Lambda^4 have been set != 0 :"
       if (fs0_0.ne.0d0) write(11,"(A,E12.3,A)") " f_S0 =", fs0_0, " GeV^-4"
       if (fs1_0.ne.0d0) write(11,"(A,E12.3,A)") " f_S1 =", fs1_0, " GeV^-4"
+      if (fs2_0.ne.0d0) write(11,"(A,E12.3,A)") " f_S2 =", fs2_0, " GeV^-4"
       if (fM0_0.ne.0d0) write(11,"(A,E12.3,A)") " f_M0 =", fm0_0, " GeV^-4"
       if (fM1_0.ne.0d0) write(11,"(A,E12.3,A)") " f_M1 =", fm1_0, " GeV^-4"
       if (fM2_0.ne.0d0) write(11,"(A,E12.3,A)") " f_M2 =", fm2_0, " GeV^-4"
@@ -129,29 +136,29 @@ c computes form factors for anomalous quartic gauge couplings from vector boson 
       write(11,*) ""
 
       ! WW -> WW
-      ! due to singularity in t-channel photon exchange integration range 0.1° < theta < 180°
-      ffscale_ww = searchff_maxpwave_ind(real_pwave_ww, "W+W- -> W+W-", 0.1d0/180d0*pi, unitviol_ww)
+      ! due to singularity in t-channel photon exchange integration range 1° < theta < 180°
+      ffscale_ww = searchff_maxpwave_ind(real_pwave_ww, "W+W- -> W+W-", photangle, unitviol_ww)
       write(11,*) "! Form factor from on-shell W+W- -> W+W- scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_WWWW =", ffscale_ww
 
       ! W+W+ -> W+W+
-      ! due to singularity in t-channel photon exchange integration range 0.1° < theta < 180°
-      ffscale_wpwp = searchff_maxpwave_ind(real_pwave_wpwp, "W+W+ -> W+W+", 0.1d0/180d0*pi, unitviol_wpwp)
+      ! due to singularity in t-channel photon exchange integration range 1° < theta < 180°
+      ffscale_wpwp = searchff_maxpwave_ind(real_pwave_wpwp, "W+W+ -> W+W+", photangle, unitviol_wpwp)
       write(11,*) "! Form factor from on-shell W+W+ -> W+W+ scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_WPWP =", ffscale_wpwp
 
       ! WW -> ZZ
-      ffscale_wwzz = searchff_maxpwave_ind(real_pwave_wwzz, "W+W- -> ZZ  ", 0d0/180d0*pi, unitviol_wwzz)
+      ffscale_wwzz = searchff_maxpwave_ind(real_pwave_wwzz, "W+W- -> ZZ  ", zeroangle, unitviol_wwzz)
       write(11,*) "! Form factor from on-shell W+W- -> ZZ scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_WWZZ =", ffscale_wwzz
 
       ! WZ -> WZ
-      ffscale_wz = searchff_maxpwave_ind(real_pwave_wz, "W+Z  -> W+Z ", 0d0/180d0*pi, unitviol_wz)
+      ffscale_wz = searchff_maxpwave_ind(real_pwave_wz, "W+Z  -> W+Z ", zeroangle, unitviol_wz)
       write(11,*) "! Form factor from on-shell W+Z -> W+Z scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_WZWZ =", ffscale_wz
 
       ! ZZ -> ZZ
-      ffscale_zz = searchff_maxpwave_ind(real_pwave_zz, "ZZ   -> ZZ  ", 0d0/180d0*pi, unitviol_zz)
+      ffscale_zz = searchff_maxpwave_ind(real_pwave_zz, "ZZ   -> ZZ  ", zeroangle, unitviol_zz)
       write(11,*) "! Form factor from on-shell ZZ -> ZZ scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_ZZZZ =", ffscale_zz
 
@@ -159,47 +166,47 @@ c computes form factors for anomalous quartic gauge couplings from vector boson 
       ! Channels with external photons:
 
       ! WW -> AA
-      ffscale_wwaa = searchff_maxpwave_ind(real_pwave_wwaa, "W+W- -> AA  ", 0d0/180d0*pi, unitviol_wwaa)
+      ffscale_wwaa = searchff_maxpwave_ind(real_pwave_wwaa, "W+W- -> AA  ", zeroangle, unitviol_wwaa)
       write(11,*) "! Form factor from on-shell W+W- -> AA scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_WWAA =", ffscale_wwaa
 
       ! WW -> ZA
-      ffscale_wwza = searchff_maxpwave_ind(real_pwave_wwza, "W+W- -> ZA  ", 0d0/180d0*pi, unitviol_wwza)
+      ffscale_wwza = searchff_maxpwave_ind(real_pwave_wwza, "W+W- -> ZA  ", zeroangle, unitviol_wwza)
       write(11,*) "! Form factor from on-shell W+W- -> ZA scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_WWZA =", ffscale_wwza
 
       ! WA -> WA
-      ffscale_wa = searchff_maxpwave_ind(real_pwave_wa, "W+A  -> W+A ", 0d0/180d0*pi, unitviol_wa)
+      ffscale_wa = searchff_maxpwave_ind(real_pwave_wa, "W+A  -> W+A ", zeroangle, unitviol_wa)
       write(11,*) "! Form factor from on-shell W+A -> W+A scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_WAWA =", ffscale_wa
 
       ! WZ -> WA
-      ffscale_wzwa = searchff_maxpwave_ind(real_pwave_wzwa, "W+Z  -> W+A ", 0d0/180d0*pi, unitviol_wzwa)
+      ffscale_wzwa = searchff_maxpwave_ind(real_pwave_wzwa, "W+Z  -> W+A ", zeroangle, unitviol_wzwa)
       write(11,*) "! Form factor from on-shell W+Z -> W+A scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_WZWA =", ffscale_wzwa
 
       ! AA -> AA
-      ffscale_aa = searchff_maxpwave_ind(real_pwave_aa, "AA   -> AA  ", 0d0/180d0*pi, unitviol_aa)
+      ffscale_aa = searchff_maxpwave_ind(real_pwave_aa, "AA   -> AA  ", zeroangle, unitviol_aa)
       write(11,*) "! Form factor from on-shell AA -> AA scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_AAAA =", ffscale_aa
 
       ! ZA -> AA
-      ffscale_zaaa = searchff_maxpwave_ind(real_pwave_zaaa, "ZA   -> AA  ", 0d0/180d0*pi, unitviol_zaaa)
+      ffscale_zaaa = searchff_maxpwave_ind(real_pwave_zaaa, "ZA   -> AA  ", zeroangle, unitviol_zaaa)
       write(11,*) "! Form factor from on-shell ZA -> AA scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_ZAAA =", ffscale_zaaa
 
       ! ZA -> ZA
-      ffscale_zaza = searchff_maxpwave_ind(real_pwave_zaza, "ZA   -> ZA  ", 0d0/180d0*pi, unitviol_zaza)
+      ffscale_zaza = searchff_maxpwave_ind(real_pwave_zaza, "ZA   -> ZA  ", zeroangle, unitviol_zaza)
       write(11,*) "! Form factor from on-shell ZA -> ZA scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_ZAZA =", ffscale_zaza
 
       ! ZZ -> AA
-      ffscale_zzaa = searchff_maxpwave_ind(real_pwave_zzaa, "ZZ   -> AA  ", 0d0/180d0*pi, unitviol_zzaa)
+      ffscale_zzaa = searchff_maxpwave_ind(real_pwave_zzaa, "ZZ   -> AA  ", zeroangle, unitviol_zzaa)
       write(11,*) "! Form factor from on-shell ZZ -> AA scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_ZZAA =", ffscale_zzaa
 
       ! ZZ -> ZA
-      ffscale_zzza = searchff_maxpwave_ind(real_pwave_zzza, "ZZ   -> ZA  ", 0d0/180d0*pi, unitviol_zzza)
+      ffscale_zzza = searchff_maxpwave_ind(real_pwave_zzza, "ZZ   -> ZA  ", zeroangle, unitviol_zzza)
       write(11,*) "! Form factor from on-shell ZZ -> ZA scattering in GeV:"
       write(11,"(A,F9.0,A)") " FFscale_ZZZA =", ffscale_zzza
 
@@ -209,36 +216,36 @@ c computes form factors for anomalous quartic gauge couplings from vector boson 
 
 
 
-      ! due to singularity in t-channel photon exchange integration range 0.1° < theta < 180°
-      ffscale_ww_diag = searchff_diag_ind(real_pwave_ww, im_pwave_ww, "W+W- -> W+W-", 0.1d0/180d0*pi, unitviol_ww_diag)
+      ! due to singularity in t-channel photon exchange integration range 1° < theta < 180°
+      ffscale_ww_diag = searchff_diag_ind(real_pwave_ww, im_pwave_ww, "W+W- -> W+W-", photangle, unitviol_ww_diag)
       write(11,*) "! Form factor from on-shell W+W- -> W+W- scattering in GeV, diagonalizing the T-matrix:"
       write(11,"(A,F9.0,A)") " FFscale_WWWW_diag =", ffscale_ww_diag
 
-      ! due to singularity in t-channel photon exchange integration range 0.1° < theta < 180°
-      ffscale_wpwp_diag = searchff_diag_ind(real_pwave_wpwp, im_pwave_wpwp, "W+W+ -> W+W+", 0.1d0/180d0*pi, unitviol_wpwp_diag)
+      ! due to singularity in t-channel photon exchange integration range 1° < theta < 180°
+      ffscale_wpwp_diag = searchff_diag_ind(real_pwave_wpwp, im_pwave_wpwp, "W+W+ -> W+W+", photangle, unitviol_wpwp_diag)
       write(11,*) "! Form factor from on-shell W+W+ -> W+W+ scattering in GeV, diagonalizing the T-matrix:"
       write(11,"(A,F9.0,A)") " FFscale_WPWP_diag =", ffscale_wpwp_diag
 
-      ffscale_zz_diag = searchff_diag_ind(real_pwave_zz, im_pwave_zz, "ZZ   -> ZZ  ", 0d0/180d0*pi, unitviol_zz_diag)
+      ffscale_zz_diag = searchff_diag_ind(real_pwave_zz, im_pwave_zz, "ZZ   -> ZZ  ", zeroangle, unitviol_zz_diag)
       write(11,*) "! Form factor from on-shell ZZ -> ZZ scattering in GeV, diagonalizing the T-matrix:"
       write(11,"(A,F9.0,A)") " FFscale_ZZZZ_diag =", ffscale_zz_diag
 
-      ffscale_wz_diag = searchff_diag_ind(real_pwave_wz, im_pwave_wz, "W+Z  -> W+Z ", 0d0/180d0*pi, unitviol_wz_diag)
+      ffscale_wz_diag = searchff_diag_ind(real_pwave_wz, im_pwave_wz, "W+Z  -> W+Z ", zeroangle, unitviol_wz_diag)
       write(11,*) "! Form factor from on-shell W+Z -> W+Z scattering in GeV, diagonalizing the T-matrix:"
       write(11,"(A,F9.0,A)") " FFscale_WZWZ_diag =", ffscale_wz_diag
 
 
       ! Channels with external photons:
 
-      ffscale_aa_diag = searchff_diag_ind(real_pwave_aa, im_pwave_aa, "AA   -> AA  ", 0d0/180d0*pi, unitviol_aa_diag)
+      ffscale_aa_diag = searchff_diag_ind(real_pwave_aa, im_pwave_aa, "AA   -> AA  ", zeroangle, unitviol_aa_diag)
       write(11,*) "! Form factor from on-shell AA -> AA scattering in GeV, diagonalizing the T-matrix:"
       write(11,"(A,F9.0,A)") " FFscale_AAAA_diag =", ffscale_aa_diag
 
-      ffscale_za_diag = searchff_diag_ind(real_pwave_zaza, im_pwave_zaza, "ZA   -> ZA  ", 0d0/180d0*pi, unitviol_za_diag)
+      ffscale_za_diag = searchff_diag_ind(real_pwave_zaza, im_pwave_zaza, "ZA   -> ZA  ", zeroangle, unitviol_za_diag)
       write(11,*) "! Form factor from on-shell ZA -> ZA scattering in GeV, diagonalizing the T-matrix:"
       write(11,"(A,F9.0,A)") " FFscale_ZAZA_diag =", ffscale_za_diag
 
-      ffscale_wa_diag = searchff_diag_ind(real_pwave_wa, im_pwave_wa, "W+A  -> W+A ", 0d0/180d0*pi, unitviol_wa_diag)
+      ffscale_wa_diag = searchff_diag_ind(real_pwave_wa, im_pwave_wa, "W+A  -> W+A ", zeroangle, unitviol_wa_diag)
       write(11,*) "! Form factor from on-shell W+A -> W+A scattering in GeV, diagonalizing the T-matrix:"
       write(11,"(A,F9.0,A)") " FFscale_WAWA_diag =", ffscale_wa_diag
 
@@ -248,14 +255,14 @@ c computes form factors for anomalous quartic gauge couplings from vector boson 
 
 
 
-      ! due to singularity in t-channel photon exchange integration range 0.1° < theta < 180°
-      ! ffscale_diag_q2 = searchff_diag_ind(real_pwave_wpwp, im_pwave_wpwp, "VV->VV, Q=2 ", 0.1d0/180d0*pi, unitviol_diag_q2)
+      ! due to singularity in t-channel photon exchange integration range 1° < theta < 180°
+      ! ffscale_diag_q2 = searchff_diag_ind(real_pwave_wpwp, im_pwave_wpwp, "VV->VV, Q=2 ", photangle, unitviol_diag_q2)
       ffscale_diag_q2  = ffscale_wpwp_diag
       unitviol_diag_q2 = unitviol_wpwp_diag
       write(11,*) "! Form factor from Q = 2 on-shell VV scattering in GeV, diagonalizing the T-matrix:"
       write(11,"(A,F9.0,A)") " FFscale_VVVV_Q_2 =", ffscale_diag_q2
 
-      ! ffscale_diag_q1 = searchff_diag_ind(real_pwave_wz, im_pwave_wz, "VV->VV, Q=1 ", 0d0/180d0*pi, unitviol_diag_q1)
+      ! ffscale_diag_q1 = searchff_diag_ind(real_pwave_wz, im_pwave_wz, "VV->VV, Q=1 ", zeroangle, unitviol_diag_q1)
       ffscale_diag_q1  = ffscale_wz_diag
       unitviol_diag_q1 = unitviol_wz_diag
       write(11,*) "! Form factor from Q = 1 on-shell VV scattering in GeV, diagonalizing the T-matrix:"
@@ -311,6 +318,7 @@ c computes form factors for anomalous quartic gauge couplings from vector boson 
       print*, ""
       if (fs0_0.ne.0d0) write(*,"(A,E12.3,A)") " f_S0 =", fs0_0, " GeV^-4"
       if (fs1_0.ne.0d0) write(*,"(A,E12.3,A)") " f_S1 =", fs1_0, " GeV^-4"
+      if (fs2_0.ne.0d0) write(*,"(A,E12.3,A)") " f_S2 =", fs2_0, " GeV^-4"
       if (fM0_0.ne.0d0) write(*,"(A,E12.3,A)") " f_M0 =", fm0_0, " GeV^-4"
       if (fM1_0.ne.0d0) write(*,"(A,E12.3,A)") " f_M1 =", fm1_0, " GeV^-4"
       if (fM2_0.ne.0d0) write(*,"(A,E12.3,A)") " f_M2 =", fm2_0, " GeV^-4"
